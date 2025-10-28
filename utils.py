@@ -23,5 +23,15 @@ def export_to_tsv(pandas_df, name):
     pandas_df.to_csv(build_result_filename(name), sep="\t", index=False)
 
 
+def load(spark_session, name):
+    return spark_session.read.parquet(build_result_filename(name, extension="parquet"))
+
+
 def read(session, name):
     return session.read.csv(build_result_filename(name), sep="\t", header=True)
+
+
+def store(spark_df, name):
+    spark_df.write.mode("overwrite").parquet(
+        build_result_filename(name, extension="parquet")
+    )
